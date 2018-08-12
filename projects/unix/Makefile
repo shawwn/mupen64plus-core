@@ -129,7 +129,7 @@ endif
 # base CFLAGS, LDLIBS, and LDFLAGS
 OPTFLAGS ?= -O3 -flto
 WARNFLAGS ?= -Wall
-CFLAGS += -ffast-math -fno-strict-aliasing -fvisibility=hidden -I../../src -I../../src/asm_defines -DM64P_PARALLEL
+CFLAGS += -ffast-math -fno-strict-aliasing -fvisibility=hidden -I/usr/local/include -I../../src -I../../src/asm_defines -DM64P_PARALLEL
 CXXFLAGS += -fvisibility-inlines-hidden
 LDLIBS +=  -lm
 
@@ -195,9 +195,9 @@ ifeq ($(OS), OSX)
 
   ifeq ($(CPU), X86)
     ifeq ($(ARCH_DETECTED), 64BITS)
-      CFLAGS += -pipe -arch x86_64 -mmacosx-version-min=10.6 -isysroot $(OSX_SDK_PATH)
+      CFLAGS += -pipe -arch x86_64 -mmacosx-version-min=10.13 -isysroot $(OSX_SDK_PATH)
     else
-      CFLAGS += -pipe -mmmx -msse -arch i686 -mmacosx-version-min=10.6 -isysroot $(OSX_SDK_PATH)
+      CFLAGS += -pipe -mmmx -msse -arch i686 -mmacosx-version-min=10.13 -isysroot $(OSX_SDK_PATH)
       ifneq ($(PROFILE), 1)
         CFLAGS += -fomit-frame-pointer
       endif
@@ -365,6 +365,9 @@ endif
 CC        = $(CROSS_COMPILE)gcc
 CXX       = $(CROSS_COMPILE)g++
 STRINGS   = $(CROSS_COMPILE)strings
+ifeq ($(OS),OSX)
+STRINGS   = $(CROSS_COMPILE)gstrings
+endif
 AS        = nasm
 TR       ?= tr
 RM       ?= rm -f
